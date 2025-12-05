@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WeatherStation.Api.Controllers.Base;
+using WeatherStation.Api.Dtos.SensorDatas;
 using WeatherStation.Api.Dtos.Sensors;
 using WeatherStation.Api.Services;
 using WeatherStation.Api.Shared.Results;
@@ -39,7 +40,7 @@ public class SensorsController : BaseController
         try
         {
             Result<List<GetSensorDto>> result = await sensorService.GetSensors(skip, take);
-            return OkOrError(result);
+            return OkOrError<List<GetSensorDto>>(result);
         }
         catch (Exception ex)
         {
@@ -56,6 +57,20 @@ public class SensorsController : BaseController
         try
         {
             Result result = await sensorService.CreateSensorData(deviceId, apiKey, request);
+            return OkOrError(result);
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
+    }
+
+    [HttpGet("data")]
+    public async Task<IActionResult> GetLatestData()
+    {
+        try
+        {
+            Result<List<GetSensorDataDto>> result = await sensorService.GetLatestData();
             return OkOrError(result);
         }
         catch (Exception ex)

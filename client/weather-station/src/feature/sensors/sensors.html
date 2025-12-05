@@ -1,0 +1,42 @@
+<div class="wrapper">
+    <div class="container">
+        <p-button (onClick)="openAddSensorDialog()">
+            Add sensor
+        </p-button>
+        @if (sensors().length > 0) {
+            <p-table [value]="sensors()" [tableStyle]="{ 'min-width': '50rem' }">
+                <ng-template #header>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-sensor>
+                    <tr>
+                        <td>{{ sensor.id }}</td>
+                        <td>{{ sensor.name }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        } @else {
+            <p-card header="No data">
+                <p>These are no sensors found</p>
+            </p-card>
+        }
+    </div>
+</div>
+
+<p-dialog
+    header="Add sensor"
+    [modal]="true"
+    [(visible)]="dialogVisible"
+    [style]="{width: '25rem'}">
+    <div class="form-group">
+        <label id="nameLabel" for="name">Name</label>
+        <input pInputText id="name" autocomplete="off" [formControl]="sensorNameForm">
+    </div>
+    <div class="form-group last">
+        <p-button (onClick)="dialogVisible = false" severity="secondary">Cancel</p-button>
+        <p-button (onClick)="submitCreateForm()">Save</p-button>
+    </div>
+</p-dialog>

@@ -1,0 +1,24 @@
+.active-wrapper {
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.small {
+    font-size: small;
+}
+
+.tem-hub-block {
+    width: 99%;
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.line-data {
+    margin-top: 2rem;
+}
+
+.tem-hub-block > p-card {
+    flex: 1;
+}

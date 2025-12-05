@@ -4,3 +4,27 @@
   --p-font-family: "Roboto", sans-serif;
   font-family: "Roboto", sans-serif;
 }
+
+.aqi-good {
+  color: var(--p-teal-500);
+}
+
+.aqi-moderate {
+  color: var(--p-lime-600);
+}
+
+.aqi-unhealthy {
+  color: var(--p-yellow-600);
+}
+
+.aqi-very-unhealthy {
+  color: var(--p-amber-600);
+}
+
+.aqi-severe {
+  color: var(--p-red-600);
+}
+
+.aqi-hazardous {
+  color: var(--p-red-800);
+}

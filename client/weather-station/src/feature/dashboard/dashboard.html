@@ -1,1 +1,53 @@
-<p-button>Main</p-button>
+@if (sensorData().length > 0) {
+    <div class="active-wrapper">
+        <p-card header="Temperature">
+            <h1>{{ latestData()?.temperature }}°C</h1>
+        </p-card>
+        <p-card header="Humidity">
+            <h1>{{ latestData()?.humidity }}%</h1>
+            <p-progressbar [value]="latestData()?.humidity" [showValue]="false"></p-progressbar>
+        </p-card>
+        @if (pm2Aqi()) {
+            <p-card header="pm 2.5 AQI">
+                <h1 [className]="aqiCategoryClass[pm2Aqi()!.category]">{{ pm2Aqi()!.aqi }}</h1>
+                <span>{{ aqiCategoryName[pm2Aqi()!.category] }}</span>
+                <br>
+                <span class="small">Now cast: {{ pm2Aqi()!.nowcastConcentration.toFixed(2) }}</span>
+                <br>
+                <span class="small">Hours used: {{ pm2Aqi()!.hoursUsed }}</span>
+            </p-card>
+        }
+        @if (pm10Aqi()) {
+            <p-card header="pm 10 AQI">
+                <h1 [className]="aqiCategoryClass[pm10Aqi()!.category]">{{ pm10Aqi()!.aqi }}</h1>
+                <span>{{ aqiCategoryName[pm10Aqi()!.category] }}</span>
+                <br>
+                <span class="small">Now cast: {{ pm10Aqi()!.nowcastConcentration.toFixed(2) }}</span>
+                <br>
+                <span class="small">Hours used: {{ pm10Aqi()!.hoursUsed }}</span>
+            </p-card>
+        }
+    </div>
+} @else {
+    <p-card header="No data">
+        <p>These is no sensor data found</p>
+    </p-card>
+}
+
+<div class="tem-hub-block">
+    @if (temperatureData()) {
+        <p-card>
+            <p-chart type="line" [data]="temperatureData()" [options]="temperatureOptions()"></p-chart>
+        </p-card>
+    }
+    @if (humidityData()) {
+        <p-card>
+            <p-chart type="line" [data]="humidityData()" [options]="percentageOptions"></p-chart>
+        </p-card>
+    }
+</div>
+@if (data()) {
+    <p-card class="line-data">
+        <p-chart type="line" [data]="data()" [options]="option"></p-chart>
+    </p-card>
+}

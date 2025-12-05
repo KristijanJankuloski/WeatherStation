@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { definePreset } from '@primeuix/themes';
+import { provideHttpClient } from '@angular/common/http';
 
 const WeatherPreset = definePreset(Aura, {
   semantic: {
@@ -23,7 +24,7 @@ const WeatherPreset = definePreset(Aura, {
     },
   },
   typography: {
-    fontFamily: 'Poppins, sans-serif'
+    fontFamily: 'Roboto, sans-serif'
   }
 });
 
@@ -31,6 +32,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideHttpClient(),
     providePrimeNG({
       theme: {
         preset: WeatherPreset,

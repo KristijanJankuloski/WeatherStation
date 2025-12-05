@@ -10,6 +10,8 @@ public class Result
 
     public Result(bool isSuccessful, string? error)
     {
+        IsSuccessful = isSuccessful;
+        Error = error;
     }
 
     public Result() { }

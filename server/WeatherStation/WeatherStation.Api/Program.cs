@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WeatherStation.Api.DataAccess.Contexts;
 using WeatherStation.Api.DataAccess.Repositories;
 using WeatherStation.Api.DataAccess.Repositories.Implementations;
+using WeatherStation.Api.Hubs;
 using WeatherStation.Api.Services;
 using WeatherStation.Api.Services.Implementations;
 
@@ -23,12 +24,20 @@ builder.Services.AddScoped<ISensorService, SensorService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors(async options =>
+    {
+        options.AllowAnyHeader();
+        options.AllowAnyMethod();
+        options.SetIsOriginAllowed((host) => true);
+        options.AllowCredentials();
+    });
     app.MapOpenApi();
     app.UseSwaggerUI(options =>
     {
@@ -40,5 +49,6 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/notificationhub");
 
 app.Run();
