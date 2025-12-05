@@ -29,26 +29,28 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseCors(async options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+    options.SetIsOriginAllowed((host) => true);
+    options.AllowCredentials();
+});
 if (app.Environment.IsDevelopment())
 {
-    app.UseCors(async options =>
-    {
-        options.AllowAnyHeader();
-        options.AllowAnyMethod();
-        options.SetIsOriginAllowed((host) => true);
-        options.AllowCredentials();
-    });
     app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/openapi/v1.json", "Open API V1");
-        options.RoutePrefix = string.Empty;
-    });
+    //app.UseSwaggerUI(options =>
+    //{
+    //    options.SwaggerEndpoint("/openapi/v1.json", "Open API V1");
+    //});
 }
+app.UseStaticFiles();
+app.UseDefaultFiles();
 
 app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<NotificationHub>("/notificationhub");
+app.MapFallbackToFile("index.html");
 
 app.Run();

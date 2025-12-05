@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Folder Include="DataAccess\Configurations\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
