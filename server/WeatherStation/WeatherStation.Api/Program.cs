@@ -53,4 +53,10 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/notificationhub");
 app.MapFallbackToFile("index.html");
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<WeatherStationDbContext>();
+    db.Database.Migrate();
+}
+
 app.Run();
