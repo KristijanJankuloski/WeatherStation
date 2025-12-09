@@ -65,6 +65,7 @@ while True:
     payload = {'pm1': pm1Value, 'pm25': pm2Value, 'pm10': pm10Value, 'temperature': temp, 'humidity': hum}
     try:
         response = requests.post(api_endpoint, json=payload)
-    except:
+    except Exception as ex:
+        print('Request not sent: ', ex)
         pass
     time.sleep(60)

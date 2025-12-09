@@ -8,10 +8,22 @@ import { CardModule } from 'primeng/card';
 import { ChartModule } from 'primeng/chart';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { aqiCategoryClassNames, aqiCategoryNames, calculateAqiFromMinutes } from '../../lib/helpers/calculate-aqi';
+import { AverageHumPipePipe } from '../../lib/pipes/average-hum-pipe-pipe';
+import { MaxTempPipePipe } from '../../lib/pipes/max-temp-pipe-pipe';
+import { MinTempPipePipe } from '../../lib/pipes/min-temp-pipe-pipe';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, ButtonModule, CardModule, ChartModule, ProgressBarModule],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    CardModule,
+    ChartModule,
+    ProgressBarModule,
+    AverageHumPipePipe,
+    MaxTempPipePipe,
+    MinTempPipePipe
+  ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -54,8 +66,7 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       labels: currentData.map(x =>{
         const date = new Date(x.createdOn);
-        // return `${date.getHours()}:${date.getMinutes()}`;
-        return '';
+        return `${date.getHours()}:${date.getMinutes()}`;
       } ),
       datasets: [
         {
@@ -71,8 +82,7 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       labels: currentData.map(x =>{
         const date = new Date(x.createdOn);
-        return '';
-        // return `${date.getHours()}:${date.getMinutes()}`;
+        return `${date.getHours()}:${date.getMinutes()}`;
       } ),
       datasets: [
         {
@@ -126,8 +136,8 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       scales: {
         y: {
-          min: Math.min(...currentData) - 5,
-          max: Math.max(...currentData) + 5
+          min: Math.ceil(Math.min(...currentData) - 5),
+          max: Math.floor(Math.max(...currentData) + 5)
         }
       }
     }

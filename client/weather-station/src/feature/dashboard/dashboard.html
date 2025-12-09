@@ -2,10 +2,15 @@
     <div class="active-wrapper">
         <p-card header="Temperature">
             <h1>{{ latestData()?.temperature }}°C</h1>
+            <span class="small">Max: {{ sensorData() | maxTempPipe }}</span>
+            <br>
+            <span class="small">Min: {{ sensorData() | minTempPipe }}</span>
         </p-card>
         <p-card header="Humidity">
             <h1>{{ latestData()?.humidity }}%</h1>
             <p-progressbar [value]="latestData()?.humidity" [showValue]="false"></p-progressbar>
+            <br>
+            <span class="small">Avg: {{ sensorData() | averageHumPipe }}</span>
         </p-card>
         @if (pm2Aqi()) {
             <p-card header="pm 2.5 AQI">
