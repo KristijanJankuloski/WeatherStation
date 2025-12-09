@@ -54,12 +54,12 @@
 <div class="hour-average-block">
     @if(pm25hourlyAverage()) {
         <p-card header="Средна вредност на pm 2.5 по час">
-            <p-chart type="bar" [data]="pm25hourlyAverage()" [options]="pm25Options()"></p-chart>
+            <p-chart type="bar" [data]="pm25hourlyAverage()" [options]="option"></p-chart>
         </p-card>
     }
     @if(pm10hourlyAverage()) {
         <p-card header="Средна вредност на pm 10 по час">
-            <p-chart type="bar" [data]="pm10hourlyAverage()" [options]="pm10Options()"></p-chart>
+            <p-chart type="bar" [data]="pm10hourlyAverage()" [options]="option"></p-chart>
         </p-card>
     }
 </div>

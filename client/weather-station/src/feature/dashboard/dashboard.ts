@@ -33,6 +33,7 @@ export class Dashboard implements OnInit, OnDestroy {
   private readonly green500 = '#22c45f';
   private readonly yellow400 = '#fbcd15';
   private readonly orange500 = '#f97217';
+  private readonly orange500t50 = 'rgba(249, 113, 23, 0.5)';
   private readonly red700 = '#b91c1c';
 
   public aqiCategoryName = aqiCategoryNames;
@@ -93,7 +94,8 @@ export class Dashboard implements OnInit, OnDestroy {
           label: 'Температура',
           data: currentData.map(x => x.temperature),
           fill: false,
-          borderColor: this.orange500
+          borderColor: this.orange500,
+          backgroundColor: this.orange500t50
         }
       ]
     }
@@ -127,7 +129,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
     for (const item of currentData) {
       const date = item.createdOn;
-      const hourKey = date.toISOString().slice(0, 13); // "2025-12-09T14"
+      const hourKey = this.getDayOfWeekAndHourText(date);
 
       if (!hourlyGroups[hourKey]) {
         hourlyGroups[hourKey] = [];
@@ -140,7 +142,7 @@ export class Dashboard implements OnInit, OnDestroy {
           values.reduce((sum, v) => sum + v, 0) / values.length;
 
         return {
-          hour,     // e.g. "2025-12-09T14"
+          hour,
           average: +avg.toFixed(1)
         };
       });
@@ -160,7 +162,7 @@ export class Dashboard implements OnInit, OnDestroy {
     });
 
     return {
-      labels: datasetData.map(x => x.hour.slice(11, 13)),
+      labels: datasetData.map(x => x.hour),
       datasets: [
         {
           label: 'Pm 2.5 ug/m3 средна вредност',
@@ -180,7 +182,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
     for (const item of currentData) {
       const date = item.createdOn;
-      const hourKey = date.toISOString().slice(0, 13); // "2025-12-09T14"
+      const hourKey = this.getDayOfWeekAndHourText(date);
 
       if (!hourlyGroups[hourKey]) {
         hourlyGroups[hourKey] = [];
@@ -193,7 +195,7 @@ export class Dashboard implements OnInit, OnDestroy {
           values.reduce((sum, v) => sum + v, 0) / values.length;
 
         return {
-          hour,     // e.g. "2025-12-09T14"
+          hour,
           average: +avg.toFixed(1)
         };
       });
@@ -213,7 +215,7 @@ export class Dashboard implements OnInit, OnDestroy {
     });
 
     return {
-      labels: datasetData.map(x => x.hour.slice(11, 13)),
+      labels: datasetData.map(x => x.hour),
       datasets: [
         {
           label: 'Pm 10 ug/m3 средна вредност',
@@ -254,30 +256,6 @@ export class Dashboard implements OnInit, OnDestroy {
     };
   });
 
-  public pm25Options = computed(() => {
-    const currentData = this.sensorData().map(x => x.pm25);
-    return {
-      scales: {
-        y: {
-          min: 0,
-          max: Math.max(Math.max(...currentData), 70)
-        }
-      }
-    };
-  });
-
-  public pm10Options = computed(() => {
-    const currentData = this.sensorData().map(x => x.pm10);
-    return {
-      scales: {
-        y: {
-          min: 0,
-          max: Math.max(Math.max(...currentData), 150)
-        }
-      }
-    };
-  });
-
   private readonly latestDataEffect = effect(() => {
     const newData = this.notificationService.latestData();
 
@@ -303,5 +281,37 @@ export class Dashboard implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+  }
+
+  private getDayOfWeekAndHourText(day: Date): string {
+    const dayOfWeek = day.getDay();
+    if (dayOfWeek === 0) {
+      return `пон ${day.getHours()}ч`;
+    }
+
+    if (dayOfWeek === 1) {
+      return `вто ${day.getHours()}ч`;
+    }
+
+    if (dayOfWeek === 2) {
+      return `сре ${day.getHours()}ч`;
+    }
+
+    if (dayOfWeek === 3) {
+      return `чет ${day.getHours()}ч`;
+    }
+
+    if (dayOfWeek === 4) {
+      return `пет ${day.getHours()}ч`;
+    }
+    if (dayOfWeek === 5) {
+      return `саб ${day.getHours()}ч`;
+    }
+
+    if (dayOfWeek === 6) {
+      return `нед ${day.getHours()}ч`;
+    }
+
+    return `${dayOfWeek} ${day.getHours()}ч`;
   }
 }

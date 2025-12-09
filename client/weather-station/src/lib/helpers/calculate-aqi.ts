@@ -8,12 +8,12 @@ export enum AqiCategory {
 };
 
 export const aqiCategoryNames: { [key in AqiCategory]: string} = {
-    [AqiCategory.Good]: 'Good',
-    [AqiCategory.Moderate]: 'Moderate',
-    [AqiCategory.UnhealthyForSensitive]: 'Unhealthy',
-    [AqiCategory.Unhealthy]: 'Very unhealthy',
-    [AqiCategory.VeryUnhealthy]: 'Severe',
-    [AqiCategory.Hazardous]: 'Hazardous'
+    [AqiCategory.Good]: 'Добро',
+    [AqiCategory.Moderate]: 'Умерено',
+    [AqiCategory.UnhealthyForSensitive]: 'Штетно за чувствителни',
+    [AqiCategory.Unhealthy]: 'Штетно',
+    [AqiCategory.VeryUnhealthy]: 'Многу штетно',
+    [AqiCategory.Hazardous]: 'Опасно'
 };
 
 export const aqiCategoryClassNames: { [key in AqiCategory]: string} = {
@@ -62,6 +62,7 @@ function getBreakpoints(type: Pollutant) {
 // AQI conversion
 function concentrationToAqi(c: number, type: Pollutant): number {
   for (const bp of getBreakpoints(type)) {
+    c = Math.round(c);
     if (c >= bp.cLow && c <= bp.cHigh) {
       const aqi =
         ((bp.iHigh - bp.iLow) / (bp.cHigh - bp.cLow)) * (c - bp.cLow) + bp.iLow;
