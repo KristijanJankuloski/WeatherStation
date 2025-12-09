@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { NotificationService } from '../../lib/services/notification-service';
@@ -26,10 +26,15 @@ import { MinTempPipePipe } from '../../lib/pipes/min-temp-pipe-pipe';
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
+  providers: [
+    DatePipe
+  ]
 })
 export class Dashboard implements OnInit, OnDestroy {
   private readonly notificationService = inject(NotificationService);
   private readonly apiService = inject(ApiService);
+  private readonly datePipe = inject(DatePipe);
+
   private readonly green500 = '#22c45f';
   private readonly yellow400 = '#fbcd15';
   private readonly orange500 = '#f97217';
@@ -45,7 +50,7 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       labels: currentData.map(x =>{
         const date = new Date(x.createdOn);
-        return `${date.getHours()}:${date.getMinutes()}`;
+        return this.datePipe.transform(date, 'HH:mm');
       } ),
       datasets: [
         {
@@ -71,7 +76,7 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       labels: currentData.map(x =>{
         const date = new Date(x.createdOn);
-        return `${date.getHours()}:${date.getMinutes()}`;
+        return this.datePipe.transform(date, 'HH:mm');
       } ),
       datasets: [
         {
@@ -87,7 +92,7 @@ export class Dashboard implements OnInit, OnDestroy {
     return {
       labels: currentData.map(x =>{
         const date = new Date(x.createdOn);
-        return `${date.getHours()}:${date.getMinutes()}`;
+        return this.datePipe.transform(date, 'HH:mm');
       } ),
       datasets: [
         {
@@ -165,7 +170,7 @@ export class Dashboard implements OnInit, OnDestroy {
       labels: datasetData.map(x => x.hour),
       datasets: [
         {
-          label: 'Pm 2.5 ug/m3 средна вредност',
+          label: 'Pm 2.5 μg/m³ средна вредност',
           data: datasetData.map(x => x.average),
           backgroundColor: barColors,
           borderColor: barColors
@@ -218,7 +223,7 @@ export class Dashboard implements OnInit, OnDestroy {
       labels: datasetData.map(x => x.hour),
       datasets: [
         {
-          label: 'Pm 10 ug/m3 средна вредност',
+          label: 'Pm 10 μg/m³ средна вредност',
           data: datasetData.map(x => x.average),
           backgroundColor: barColors,
           borderColor: barColors

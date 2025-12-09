@@ -2,15 +2,15 @@
     <div class="active-wrapper">
         <p-card header="Температура">
             <h1>{{ latestData()?.temperature }}°C</h1>
-            <span class="small">Max: {{ sensorData() | maxTempPipe }}</span>
+            <span class="small">Max: {{ sensorData() | maxTempPipe }}°C</span>
             <br>
-            <span class="small">Min: {{ sensorData() | minTempPipe }}</span>
+            <span class="small">Min: {{ sensorData() | minTempPipe }}°C</span>
         </p-card>
         <p-card header="Влажност">
             <h1>{{ latestData()?.humidity }}%</h1>
             <p-progressbar [value]="latestData()?.humidity" [showValue]="false"></p-progressbar>
             <br>
-            <span class="small">Avg: {{ sensorData() | averageHumPipe }}</span>
+            <span class="small">Avg: {{ sensorData() | averageHumPipe }}%</span>
         </p-card>
         @if (pm2Aqi()) {
             <p-card header="pm 2.5 AQI">
@@ -64,7 +64,7 @@
     }
 </div>
 @if (data()) {
-    <p-card class="line-data" header="Мерени честички во воздух (ug/m3)">
+    <p-card class="line-data" header="Мерени честички во воздух (μg/m³)">
         <p-chart type="line" [data]="data()" [options]="option"></p-chart>
     </p-card>
 }
