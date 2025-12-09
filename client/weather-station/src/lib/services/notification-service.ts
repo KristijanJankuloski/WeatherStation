@@ -32,6 +32,7 @@ export class NotificationService {
   public addMessageListener() {
     this.hubConnection!.on('Notification', (data: string) => {
       const obj: GetSensorDataResponse = JSON.parse(data);
+      obj.createdOn = new Date(obj.createdOn);
       this.latestData.set(obj);
     });
   }

@@ -1,12 +1,12 @@
 @if (sensorData().length > 0) {
     <div class="active-wrapper">
-        <p-card header="Temperature">
+        <p-card header="Температура">
             <h1>{{ latestData()?.temperature }}°C</h1>
             <span class="small">Max: {{ sensorData() | maxTempPipe }}</span>
             <br>
             <span class="small">Min: {{ sensorData() | minTempPipe }}</span>
         </p-card>
-        <p-card header="Humidity">
+        <p-card header="Влажност">
             <h1>{{ latestData()?.humidity }}%</h1>
             <p-progressbar [value]="latestData()?.humidity" [showValue]="false"></p-progressbar>
             <br>
@@ -19,7 +19,7 @@
                 <br>
                 <span class="small">Now cast: {{ pm2Aqi()!.nowcastConcentration.toFixed(2) }}</span>
                 <br>
-                <span class="small">Hours used: {{ pm2Aqi()!.hoursUsed }}</span>
+                <span class="small">Искористени часови: {{ pm2Aqi()!.hoursUsed }}</span>
             </p-card>
         }
         @if (pm10Aqi()) {
@@ -29,30 +29,42 @@
                 <br>
                 <span class="small">Now cast: {{ pm10Aqi()!.nowcastConcentration.toFixed(2) }}</span>
                 <br>
-                <span class="small">Hours used: {{ pm10Aqi()!.hoursUsed }}</span>
+                <span class="small">Искористени часови: {{ pm10Aqi()!.hoursUsed }}</span>
             </p-card>
         }
     </div>
 } @else {
     <p-card header="No data">
-        <p>These is no sensor data found</p>
+        <p>Нема податоци од сензори</p>
     </p-card>
 }
 
 <div class="tem-hub-block">
     @if (temperatureData()) {
-        <p-card>
+        <p-card header="Температура на воздух">
             <p-chart type="line" [data]="temperatureData()" [options]="temperatureOptions()"></p-chart>
         </p-card>
     }
     @if (humidityData()) {
-        <p-card>
+        <p-card header="Влажност во воздух">
             <p-chart type="line" [data]="humidityData()" [options]="percentageOptions"></p-chart>
         </p-card>
     }
 </div>
+<div class="hour-average-block">
+    @if(pm25hourlyAverage()) {
+        <p-card header="Средна вредност на pm 2.5 по час">
+            <p-chart type="bar" [data]="pm25hourlyAverage()" [options]="pm25Options()"></p-chart>
+        </p-card>
+    }
+    @if(pm10hourlyAverage()) {
+        <p-card header="Средна вредност на pm 10 по час">
+            <p-chart type="bar" [data]="pm10hourlyAverage()" [options]="pm10Options()"></p-chart>
+        </p-card>
+    }
+</div>
 @if (data()) {
-    <p-card class="line-data">
+    <p-card class="line-data" header="Мерени честички во воздух (ug/m3)">
         <p-chart type="line" [data]="data()" [options]="option"></p-chart>
     </p-card>
 }

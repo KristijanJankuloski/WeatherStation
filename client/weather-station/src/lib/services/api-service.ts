@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { CreateSensorRequest } from '../models/requests/sensor';
 import { GetSensorDataResponse, GetSensorResponse } from '../models/responses/sensor';
 import { environment } from '../../environments/environment';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,8 @@ export class ApiService {
   }
 
   public getLatestSenorData() {
-    return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data`);
+    return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data`).pipe(
+      map(data => data.map(x => ({...x, createdOn: new Date(x.createdOn)})))
+    );
   }
 }

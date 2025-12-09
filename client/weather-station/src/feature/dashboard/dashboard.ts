@@ -30,6 +30,10 @@ import { MinTempPipePipe } from '../../lib/pipes/min-temp-pipe-pipe';
 export class Dashboard implements OnInit, OnDestroy {
   private readonly notificationService = inject(NotificationService);
   private readonly apiService = inject(ApiService);
+  private readonly green500 = '#22c45f';
+  private readonly yellow400 = '#fbcd15';
+  private readonly orange500 = '#f97217';
+  private readonly red700 = '#b91c1c';
 
   public aqiCategoryName = aqiCategoryNames;
   public aqiCategoryClass = aqiCategoryClassNames;
@@ -70,7 +74,7 @@ export class Dashboard implements OnInit, OnDestroy {
       } ),
       datasets: [
         {
-          label: 'Humidity',
+          label: 'Влажност',
           data: currentData.map(x => x.humidity),
           fill: false
         }
@@ -86,9 +90,10 @@ export class Dashboard implements OnInit, OnDestroy {
       } ),
       datasets: [
         {
-          label: 'Temperature',
+          label: 'Температура',
           data: currentData.map(x => x.temperature),
-          fill: false
+          fill: false,
+          borderColor: this.orange500
         }
       ]
     }
@@ -112,6 +117,112 @@ export class Dashboard implements OnInit, OnDestroy {
     }
 
     return undefined;
+  });
+
+  public pm25hourlyAverage = computed(() => {
+    const currentData = this.sensorData();
+    let datasetData = [];
+
+    const hourlyGroups: Record<string, number[]> = {};
+
+    for (const item of currentData) {
+      const date = item.createdOn;
+      const hourKey = date.toISOString().slice(0, 13); // "2025-12-09T14"
+
+      if (!hourlyGroups[hourKey]) {
+        hourlyGroups[hourKey] = [];
+      }
+      hourlyGroups[hourKey].push(item.pm25);
+    }
+
+    datasetData = Object.entries(hourlyGroups).map(([hour, values]) => {
+        const avg =
+          values.reduce((sum, v) => sum + v, 0) / values.length;
+
+        return {
+          hour,     // e.g. "2025-12-09T14"
+          average: +avg.toFixed(1)
+        };
+      });
+
+    const barColors = datasetData.map(data => {
+      if (data.average < 16) {
+        return this.green500;
+      }
+      else if (data.average < 40) {
+        return this.yellow400;
+      }
+      else if (data.average < 80) {
+        return this.orange500;
+      }
+
+      return this.red700;
+    });
+
+    return {
+      labels: datasetData.map(x => x.hour.slice(11, 13)),
+      datasets: [
+        {
+          label: 'Pm 2.5 ug/m3 средна вредност',
+          data: datasetData.map(x => x.average),
+          backgroundColor: barColors,
+          borderColor: barColors
+        }
+      ]
+    };
+  });
+
+  public pm10hourlyAverage = computed(() => {
+    const currentData = this.sensorData();
+    let datasetData = [];
+
+    const hourlyGroups: Record<string, number[]> = {};
+
+    for (const item of currentData) {
+      const date = item.createdOn;
+      const hourKey = date.toISOString().slice(0, 13); // "2025-12-09T14"
+
+      if (!hourlyGroups[hourKey]) {
+        hourlyGroups[hourKey] = [];
+      }
+      hourlyGroups[hourKey].push(item.pm10);
+    }
+
+    datasetData = Object.entries(hourlyGroups).map(([hour, values]) => {
+        const avg =
+          values.reduce((sum, v) => sum + v, 0) / values.length;
+
+        return {
+          hour,     // e.g. "2025-12-09T14"
+          average: +avg.toFixed(1)
+        };
+      });
+
+    const barColors = datasetData.map(data => {
+      if (data.average < 40) {
+        return this.green500;
+      }
+      else if (data.average < 100) {
+        return this.yellow400;
+      }
+      else if (data.average < 140) {
+        return this.orange500;
+      }
+
+      return this.red700;
+    });
+
+    return {
+      labels: datasetData.map(x => x.hour.slice(11, 13)),
+      datasets: [
+        {
+          label: 'Pm 10 ug/m3 средна вредност',
+          data: datasetData.map(x => x.average),
+          backgroundColor: barColors,
+          borderColor: barColors
+        }
+      ]
+    };
   });
 
   public option = {
@@ -140,7 +251,31 @@ export class Dashboard implements OnInit, OnDestroy {
           max: Math.floor(Math.max(...currentData) + 5)
         }
       }
-    }
+    };
+  });
+
+  public pm25Options = computed(() => {
+    const currentData = this.sensorData().map(x => x.pm25);
+    return {
+      scales: {
+        y: {
+          min: 0,
+          max: Math.max(Math.max(...currentData), 70)
+        }
+      }
+    };
+  });
+
+  public pm10Options = computed(() => {
+    const currentData = this.sensorData().map(x => x.pm10);
+    return {
+      scales: {
+        y: {
+          min: 0,
+          max: Math.max(Math.max(...currentData), 150)
+        }
+      }
+    };
   });
 
   private readonly latestDataEffect = effect(() => {

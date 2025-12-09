@@ -22,3 +22,14 @@
 .tem-hub-block > p-card {
     flex: 1;
 }
+
+.hour-average-block {
+    width: 99%;
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.hour-average-block > p-card {
+    flex: 1;
+}
