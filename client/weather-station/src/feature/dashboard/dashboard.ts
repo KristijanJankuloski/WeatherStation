@@ -37,6 +37,7 @@ export class Dashboard implements OnInit, OnDestroy {
 
   private readonly green500 = '#22c45f';
   private readonly yellow400 = '#fbcd15';
+  private readonly amber500 = '#f59e0b';
   private readonly orange500 = '#f97217';
   private readonly orange500t50 = 'rgba(249, 113, 23, 0.5)';
   private readonly red700 = '#b91c1c';
@@ -156,8 +157,11 @@ export class Dashboard implements OnInit, OnDestroy {
       if (data.average < 16) {
         return this.green500;
       }
-      else if (data.average < 40) {
+      else if (data.average < 30) {
         return this.yellow400;
+      }
+      else if (data.average < 60) {
+        return this.amber500;
       }
       else if (data.average < 80) {
         return this.orange500;
@@ -209,10 +213,13 @@ export class Dashboard implements OnInit, OnDestroy {
       if (data.average < 40) {
         return this.green500;
       }
-      else if (data.average < 100) {
+      else if (data.average < 70) {
         return this.yellow400;
       }
-      else if (data.average < 140) {
+      else if (data.average < 100) {
+        return this.amber500;
+      }
+      else if (data.average < 150) {
         return this.orange500;
       }
 
@@ -290,30 +297,30 @@ export class Dashboard implements OnInit, OnDestroy {
 
   private getDayOfWeekAndHourText(day: Date): string {
     const dayOfWeek = day.getDay();
-    if (dayOfWeek === 0) {
+    if (dayOfWeek === 1) {
       return `пон ${day.getHours()}ч`;
     }
 
-    if (dayOfWeek === 1) {
+    if (dayOfWeek === 2) {
       return `вто ${day.getHours()}ч`;
     }
 
-    if (dayOfWeek === 2) {
+    if (dayOfWeek === 3) {
       return `сре ${day.getHours()}ч`;
     }
 
-    if (dayOfWeek === 3) {
+    if (dayOfWeek === 4) {
       return `чет ${day.getHours()}ч`;
     }
 
-    if (dayOfWeek === 4) {
+    if (dayOfWeek === 5) {
       return `пет ${day.getHours()}ч`;
     }
-    if (dayOfWeek === 5) {
+    if (dayOfWeek === 6) {
       return `саб ${day.getHours()}ч`;
     }
 
-    if (dayOfWeek === 6) {
+    if (dayOfWeek === 0) {
       return `нед ${day.getHours()}ч`;
     }
 
