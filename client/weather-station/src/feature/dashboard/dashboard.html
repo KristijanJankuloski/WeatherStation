@@ -14,7 +14,10 @@
         </p-card>
         @if (pm2Aqi()) {
             <p-card header="pm 2.5 AQI">
-                <h1 [className]="aqiCategoryClass[pm2Aqi()!.category]">{{ pm2Aqi()!.aqi }}</h1>
+                <div class="aqi-title">
+                    <h1 [className]="aqiCategoryClass[pm2Aqi()!.category]">{{ pm2Aqi()!.aqi }}</h1>
+                    <h4>{{ latestData()?.pm25 }}μg/m³</h4>
+                </div>
                 <span>{{ aqiCategoryName[pm2Aqi()!.category] }}</span>
                 <br>
                 <span class="small">Now cast: {{ pm2Aqi()!.nowcastConcentration.toFixed(2) }}</span>
@@ -24,7 +27,10 @@
         }
         @if (pm10Aqi()) {
             <p-card header="pm 10 AQI">
-                <h1 [className]="aqiCategoryClass[pm10Aqi()!.category]">{{ pm10Aqi()!.aqi }}</h1>
+                <div class="aqi-title">
+                    <h1 [className]="aqiCategoryClass[pm10Aqi()!.category]">{{ pm10Aqi()!.aqi }}</h1>
+                    <h4>{{ latestData()?.pm10 }}μg/m³</h4>
+                </div>
                 <span>{{ aqiCategoryName[pm10Aqi()!.category] }}</span>
                 <br>
                 <span class="small">Now cast: {{ pm10Aqi()!.nowcastConcentration.toFixed(2) }}</span>
