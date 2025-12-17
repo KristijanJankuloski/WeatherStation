@@ -89,24 +89,63 @@ public class SensorService : ISensorService
         return Result.Ok();
     }
 
-    public async Task<Result<List<GetSensorDataDto>>> GetFromRange(DateOnly start, DateOnly end)
+    public async Task<Result<List<GetSensorDataDto>>> GetFromRange(DateOnly start, DateOnly end, TimeOnly roundTime)
     {
         DateTime startDate = new DateTime(start, new TimeOnly(0, 0), DateTimeKind.Utc);
         DateTime endDate = new DateTime(end, new TimeOnly(23, 59), DateTimeKind.Utc);
         List<SensorData> sensorData = await sensorDataRepository.GetByQuery(query =>
          query.Where(x => x.CreatedOn >= startDate && x.CreatedOn <= endDate));
 
-        var hourGroups = sensorData.GroupBy(x => new DateTime(x.CreatedOn.Year, x.CreatedOn.Month, x.CreatedOn.Day, x.CreatedOn.Hour, 0, 0));
-        var result = hourGroups.Select(group => new GetSensorDataDto
+        int bucketMinutes = roundTime.Hour * 60 + roundTime.Minute;
+
+        // Whole-day aggregation
+        if (bucketMinutes == 0)
         {
-            Id = group.FirstOrDefault()?.Id ?? 0,
-            CreatedOn = group.Key,
-            Temperature = group.Average(x => x.Temperature),
-            Humidity = (int)Math.Round(group.Average(x => x.Humidity)),
-            Pm25 = group.Average(x => x.Pm25),
-            Pm1 = group.Average(x => x.Pm1),
-            Pm10 = group.Average(x => x.Pm10)
-        }).ToList();
+            var daily = sensorData
+                .GroupBy(x => x.CreatedOn.Date)
+                .Select(group => new GetSensorDataDto
+                {
+                    Id = group.First().Id,
+                    CreatedOn = group.Key,
+                    Temperature = group.Average(x => x.Temperature),
+                    Humidity = (int)Math.Round(group.Average(x => x.Humidity)),
+                    Pm25 = group.Average(x => x.Pm25),
+                    Pm1 = group.Average(x => x.Pm1),
+                    Pm10 = group.Average(x => x.Pm10)
+                })
+                .ToList();
+
+            return Result<List<GetSensorDataDto>>.Ok(daily);
+        }
+
+        var result = sensorData
+            .GroupBy(x =>
+            {
+                var c = x.CreatedOn;
+                int totalMinutes = c.Hour * 60 + c.Minute;
+                int bucketStart = (totalMinutes / bucketMinutes) * bucketMinutes;
+
+                return new DateTime(
+                    c.Year,
+                    c.Month,
+                    c.Day,
+                    bucketStart / 60,
+                    bucketStart % 60,
+                    0,
+                    DateTimeKind.Utc);
+            })
+            .Select(group => new GetSensorDataDto
+            {
+                Id = group.First().Id,
+                CreatedOn = group.Key,
+                Temperature = group.Average(x => x.Temperature),
+                Humidity = (int)Math.Round(group.Average(x => x.Humidity)),
+                Pm25 = group.Average(x => x.Pm25),
+                Pm1 = group.Average(x => x.Pm1),
+                Pm10 = group.Average(x => x.Pm10)
+            })
+            .OrderBy(x => x.CreatedOn)
+            .ToList();
 
         return Result<List<GetSensorDataDto>>.Ok(result);
     }

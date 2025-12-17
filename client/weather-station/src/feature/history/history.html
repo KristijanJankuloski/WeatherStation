@@ -1,11 +1,20 @@
 <div class="wrapper">
-    <label>Range: </label>
-    <p-datepicker
-        [formControl]="dateRangeForm"
+    <form [formGroup]="dateFromGroup">
+        <label>Дати: </label>
+        <p-datepicker
+        formControlName="range"
         selectionMode="range"
         [dateFormat]="'dd.mm.yy'"
         [readonlyInput]="true"
-    ></p-datepicker>
+        ></p-datepicker>
+        <label>Период: </label>
+        <p-select
+            formControlName="period"
+            [options]="periodOptions"
+            optionLabel="name"
+            optionValue="value"
+        ></p-select>
+    </form>
     <div class="data-wrapper">
         <p-card header="Температура">
             <p-chart type="line" [data]="temperature()"></p-chart>

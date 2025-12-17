@@ -4,3 +4,7 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
+
+.wrapper form label {
+    margin-left: 1rem;
+}

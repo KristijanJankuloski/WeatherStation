@@ -80,11 +80,11 @@ public class SensorsController : BaseController
     }
 
     [HttpGet("data-history")]
-    public async Task<IActionResult> GetHistoricalData([FromQuery] DateOnly start, [FromQuery] DateOnly end)
+    public async Task<IActionResult> GetHistoricalData([FromQuery] DateOnly start, [FromQuery] DateOnly end, [FromQuery] TimeOnly roundTime)
     {
         try
         {
-            Result<List<GetSensorDataDto>> result = await sensorService.GetFromRange(start, end);
+            Result<List<GetSensorDataDto>> result = await sensorService.GetFromRange(start, end, roundTime);
             return OkOrError(result);
         }
         catch (Exception ex)

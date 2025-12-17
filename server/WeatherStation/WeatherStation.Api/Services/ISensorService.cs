@@ -14,5 +14,5 @@ public interface ISensorService
 
     Task<Result<List<GetSensorDataDto>>> GetLatestData();
 
-    Task<Result<List<GetSensorDataDto>>> GetFromRange(DateOnly start, DateOnly end); 
+    Task<Result<List<GetSensorDataDto>>> GetFromRange(DateOnly start, DateOnly end, TimeOnly roundTime); 
 }

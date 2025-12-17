@@ -1,12 +1,13 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 import { DatePicker } from 'primeng/datepicker';
 import { ApiService } from '../../lib/services/api-service';
 import { of, Subscription, switchMap } from 'rxjs';
 import { GetSensorDataResponse } from '../../lib/models/responses/sensor';
 import { CardModule } from 'primeng/card';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-history',
@@ -15,7 +16,8 @@ import { CardModule } from 'primeng/card';
     ChartModule,
     CardModule,
     DatePicker,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Select
   ],
   templateUrl: './history.html',
   styleUrl: './history.css',
@@ -34,8 +36,22 @@ export class History implements OnInit, OnDestroy {
   private readonly apiService = inject(ApiService);
   private readonly datePipe = inject(DatePipe);
 
-  public dateRangeForm = new FormControl<Date[]>([]);
+  public dateFromGroup = new FormGroup({
+    range: new FormControl<Date[]>([]),
+    period: new FormControl(60)
+  });
   private dateRangeForm$?: Subscription;
+  public periodOptions = [
+    { name: '1 min', value: 1 },
+    { name: '2 min', value: 2 },
+    { name: '5 min', value: 5 },
+    { name: '10 min', value: 10 },
+    { name: '30 min', value: 30 },
+    { name: '1 h', value: 60 },
+    { name: '2 h', value: 120 },
+    { name: '4 h', value: 240 },
+    { name: '1 ден', value: 0 }
+  ]
 
   public data = signal<GetSensorDataResponse[]>([]);
 
@@ -138,13 +154,13 @@ export class History implements OnInit, OnDestroy {
   });
 
   public ngOnInit(): void {
-    this.dateRangeForm$ = this.dateRangeForm.valueChanges.pipe(
+    this.dateRangeForm$ = this.dateFromGroup.valueChanges.pipe(
       switchMap(value => {
-        if (!value || !value[0] || !value[1]) {
+        if (!value || !value.range || !value.range[0] || !value.range[1]) {
           return of([]);
         }
 
-        return this.apiService.getFromRange(value[0], value[1]);
+        return this.apiService.getFromRange(value.range[0], value.range[1], value.period ?? 60);
       })
     )
     .subscribe(value => {
