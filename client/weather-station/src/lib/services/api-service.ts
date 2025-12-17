@@ -26,7 +26,13 @@ export class ApiService {
   }
 
   public getFromRange(start: Date, end: Date) {
-    return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data-history?start=${start.toISOString()}&end=${end.toISOString()}`)
+    console.log(start);
+    console.log(this.toDateOnly(start))
+    return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data-history?start=${this.toDateOnly(start)}&end=${this.toDateOnly(end)}`)
       .pipe(map(data => data.map(x => ({...x, createdOn: new Date(x.createdOn)}))));
+  }
+
+  private toDateOnly(date: Date): string {
+    return new Intl.DateTimeFormat('en-CA').format(date);
   }
 }
