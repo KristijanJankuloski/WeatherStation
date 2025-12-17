@@ -78,4 +78,20 @@ public class SensorsController : BaseController
             return InternalServerError(ex);
         }
     }
+
+    [HttpGet("data-history")]
+    public async Task<IActionResult> GetHistoricalData([FromQuery] DateTime start, [FromQuery] DateTime end)
+    {
+        try
+        {
+            Result<List<GetSensorDataDto>> result = await sensorService.GetFromRange(
+                new DateOnly(start.Year, start.Month, start.Day),
+                new DateOnly(end.Year, end.Month, end.Day));
+            return OkOrError(result);
+        }
+        catch (Exception ex)
+        {
+            return InternalServerError(ex);
+        }
+    }
 }

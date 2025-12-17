@@ -1,0 +1,22 @@
+<div class="wrapper">
+    <label>Range: </label>
+    <p-datepicker
+        [formControl]="dateRangeForm"
+        selectionMode="range"
+        [readonlyInput]="true"
+    ></p-datepicker>
+    <div class="data-wrapper">
+        <p-card header="Температура">
+            <p-chart type="line" [data]="temperature()"></p-chart>
+        </p-card>
+        <p-card header="Влажност">
+            <p-chart type="line" [data]="humidity()"></p-chart>
+        </p-card>
+        <p-card header="PM 2.5 μg/m³">
+            <p-chart type="bar" [data]="pm25()"></p-chart>
+        </p-card>
+        <p-card header="PM 10 μg/m³">
+            <p-chart type="bar" [data]="pm10()"></p-chart>
+        </p-card>
+    </div>
+</div>

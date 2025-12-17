@@ -11,6 +11,7 @@ import { aqiCategoryClassNames, aqiCategoryNames, calculateAqiFromMinutes } from
 import { AverageHumPipePipe } from '../../lib/pipes/average-hum-pipe-pipe';
 import { MaxTempPipePipe } from '../../lib/pipes/max-temp-pipe-pipe';
 import { MinTempPipePipe } from '../../lib/pipes/min-temp-pipe-pipe';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +23,8 @@ import { MinTempPipePipe } from '../../lib/pipes/min-temp-pipe-pipe';
     ProgressBarModule,
     AverageHumPipePipe,
     MaxTempPipePipe,
-    MinTempPipePipe
+    MinTempPipePipe,
+    RouterLink
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',

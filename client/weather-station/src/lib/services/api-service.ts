@@ -24,4 +24,9 @@ export class ApiService {
       map(data => data.map(x => ({...x, createdOn: new Date(x.createdOn)})))
     );
   }
+
+  public getFromRange(start: Date, end: Date) {
+    return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data-history?start=${start.toISOString()}&end=${end.toISOString()}`)
+      .pipe(map(data => data.map(x => ({...x, createdOn: new Date(x.createdOn)}))));
+  }
 }

@@ -13,4 +13,6 @@ public interface ISensorService
     Task<Result> CreateSensorData(long sensorId, string apiKey, CreateSensorDataDto dto);
 
     Task<Result<List<GetSensorDataDto>>> GetLatestData();
+
+    Task<Result<List<GetSensorDataDto>>> GetFromRange(DateOnly start, DateOnly end); 
 }
