@@ -20,7 +20,7 @@
             <p-chart type="line" [data]="temperature()"></p-chart>
         </p-card>
         <p-card header="Влажност">
-            <p-chart type="line" [data]="humidity()"></p-chart>
+            <p-chart type="line" [data]="humidity()" [options]="percentageOptions"></p-chart>
         </p-card>
         <p-card header="PM 2.5 μg/m³">
             <p-chart type="bar" [data]="pm25()"></p-chart>

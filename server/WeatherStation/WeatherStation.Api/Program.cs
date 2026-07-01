@@ -21,6 +21,7 @@ builder.Services.AddTransient<ISensorRepository, SensorRepository>();
 builder.Services.AddTransient<ISensorDataRepository, SensorDataRepository>();
 
 builder.Services.AddScoped<ISensorService, SensorService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

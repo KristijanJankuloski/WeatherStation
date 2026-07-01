@@ -153,6 +153,15 @@ export class History implements OnInit, OnDestroy {
     }
   });
 
+  public percentageOptions = {
+    scales: {
+      y: {
+        min: 0,
+        max: 100
+      }
+    }
+  };
+
   public ngOnInit(): void {
     this.dateRangeForm$ = this.dateFromGroup.valueChanges.pipe(
       switchMap(value => {

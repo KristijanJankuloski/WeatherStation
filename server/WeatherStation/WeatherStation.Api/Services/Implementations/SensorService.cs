@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Newtonsoft.Json;
-using WeatherStation.Api.DataAccess.Repositories;
+﻿using WeatherStation.Api.DataAccess.Repositories;
 using WeatherStation.Api.Dtos.SensorDatas;
 using WeatherStation.Api.Dtos.Sensors;
-using WeatherStation.Api.Hubs;
 using WeatherStation.Api.Models;
 using WeatherStation.Api.Shared.Results;
 
@@ -14,18 +11,18 @@ public class SensorService : ISensorService
     private readonly ISensorRepository sensorRepository;
     private readonly ISensorDataRepository sensorDataRepository;
     private readonly IConfiguration configuration;
-    private readonly IHubContext<NotificationHub> hubContext;
+    private readonly INotificationService notificationService;
 
     public SensorService(
         ISensorRepository sensorRepository,
         ISensorDataRepository sensorDataRepository,
         IConfiguration configuration,
-        IHubContext<NotificationHub> hubContext)
+        INotificationService notificationService)
     {
         this.sensorRepository = sensorRepository;
         this.sensorDataRepository = sensorDataRepository;
         this.configuration = configuration;
-        this.hubContext = hubContext;
+        this.notificationService = notificationService;
     }
 
     public async Task<Result<long>> CreateSensor(SensorCreateDto dto)
@@ -85,7 +82,7 @@ public class SensorService : ISensorService
             CreatedOn = sensorData.CreatedOn
         };
 
-        await hubContext.Clients.All.SendAsync("Notification", JsonConvert.SerializeObject(createdData));
+        await notificationService.SendNotification(createdData);
         return Result.Ok();
     }
 

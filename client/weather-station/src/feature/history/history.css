@@ -5,6 +5,12 @@
     gap: 1rem;
 }
 
+@media screen and (max-width: 600px) {
+    .data-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
 .wrapper form label {
     margin-left: 1rem;
 }
