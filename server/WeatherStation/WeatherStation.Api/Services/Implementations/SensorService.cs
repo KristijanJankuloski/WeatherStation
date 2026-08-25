@@ -155,7 +155,7 @@ public class SensorService : ISensorService
         List<SensorData> sensorData = await sensorDataRepository.GetByQuery(query =>
          query
          .Where(x => x.CreatedOn >= startDate && x.CreatedOn <= endDate)
-         .OrderByDescending(x => x.Id));
+         .OrderBy(x => x.Id));
 
         List<GetSensorDataDto> result = sensorData.Select(x => new GetSensorDataDto
         {
