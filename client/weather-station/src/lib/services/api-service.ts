@@ -26,8 +26,6 @@ export class ApiService {
   }
 
   public getFromRange(start: Date, end: Date, roundTime: number) {
-    console.log(start);
-    console.log(this.toDateOnly(start))
     return this.http.get<GetSensorDataResponse[]>(`${environment.apiBase}/sensors/data-history?start=${this.toDateOnly(start)}&end=${this.toDateOnly(end)}&roundTime=${this.toTimeOnly(roundTime)}`)
       .pipe(map(data => data.map(x => ({...x, createdOn: new Date(x.createdOn)}))));
   }

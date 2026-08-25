@@ -153,7 +153,9 @@ public class SensorService : ISensorService
         DateTime startDate = endDate.AddDays(-1);
 
         List<SensorData> sensorData = await sensorDataRepository.GetByQuery(query =>
-         query.Where(x => x.CreatedOn >= startDate && x.CreatedOn <= endDate));
+         query
+         .Where(x => x.CreatedOn >= startDate && x.CreatedOn <= endDate)
+         .OrderByDescending(x => x.Id));
 
         List<GetSensorDataDto> result = sensorData.Select(x => new GetSensorDataDto
         {
