@@ -71,7 +71,7 @@
 </div>
 @if (data()) {
     <p-card class="line-data" header="Мерени честички во воздух (μg/m³)">
-        <p-chart type="line" [data]="data()" [options]="option"></p-chart>
+        <p-chart type="line" [data]="data()" [options]="pmDataOptions()"></p-chart>
     </p-card>
 }
 <div class="footer">

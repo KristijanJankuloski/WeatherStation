@@ -249,6 +249,20 @@ export class Dashboard implements OnInit, OnDestroy {
     }
   }
 
+  public pmDataOptions = computed(() => {
+    const currentData = this.sensorData();
+    const maxReading = Math.max(0, ...currentData.map(x => x.pm1), ...currentData.map(x => x.pm25), ...currentData.map(x => x.pm10));
+
+    return {
+      scales: {
+        y: {
+          min: 0,
+          max: Math.max(30, maxReading)
+        }
+      }
+    };
+  });
+
   public percentageOptions = {
     scales: {
       y: {
